@@ -4,6 +4,7 @@ This is a fork of [github.com/mitchellh/go-server-timing](github.com/mitchellh/g
 the following features:
 
 - Updated dependencies.
+- Round down all timing information to milliseconds to not be too precise (and potentially open a side channel).
 
 To add it, do:
 

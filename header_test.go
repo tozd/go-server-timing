@@ -74,7 +74,7 @@ var headerCases = []struct {
 				Extra:    map[string]string{},
 			},
 		},
-		`sql-1;desc="MySQL; lookup Server";dur=100.1`,
+		`sql-1;desc="MySQL; lookup Server";dur=100`,
 	},
 }
 
@@ -86,8 +86,14 @@ func TestParseHeader(t *testing.T) {
 				t.Fatalf("error parsing header: %s", err)
 			}
 
-			if !reflect.DeepEqual(h.Metrics, tt.Metrics) {
-				t.Fatalf("received, expected:\n\n%#v\n\n%#v", h.Metrics, tt.Metrics)
+			metricsRounded := make([]*Metric, 0)
+			for _, m := range tt.Metrics {
+				x := *m
+				x.Duration = (x.Duration / time.Millisecond) * time.Millisecond
+				metricsRounded = append(metricsRounded, &x)
+			}
+			if !reflect.DeepEqual(h.Metrics, metricsRounded) {
+				t.Fatalf("received, expected:\n\n%#v\n\n%#v", h.Metrics, metricsRounded)
 			}
 		})
 	}
