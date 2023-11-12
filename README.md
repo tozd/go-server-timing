@@ -1,5 +1,23 @@
 # HTTP Server-Timing for Go
-[![Godoc](https://godoc.org/github.com/mitchellh/go-server-timing?status.svg)](https://godoc.org/github.com/mitchellh/go-server-timing)
+
+This is a fork of [github.com/mitchellh/go-server-timing](github.com/mitchellh/go-server-timing) and extends it with
+the following features:
+
+- Updated dependencies.
+
+To add it, do:
+
+```sh
+go get github.com/tozd/go-server-timing@tozd
+```
+
+If you already using `github.com/mitchellh/go-server-timing` as a dependency, you can also do
+find/replace of `github.com/mitchellh/go-server-timing` with `github.com/tozd/go-server-timing`
+in your code.
+
+---
+
+[![Godoc](https://godoc.org/github.com/tozd/go-server-timing?status.svg)](https://godoc.org/github.com/tozd/go-server-timing)
 
 This is a library including middleware for using
 [HTTP Server-Timing](https://www.w3.org/TR/server-timing) with Go. This header
@@ -7,21 +25,21 @@ allows a server to send timing information from the backend, such as database
 access time, file reads, etc. The timing information can be then be inspected
 in the standard browser developer tools:
 
-![Server Timing Example](https://raw.githubusercontent.com/mitchellh/go-server-timing/master/example/screenshot.png)
+![Server Timing Example](https://raw.githubusercontent.com/tozd/go-server-timing/master/example/screenshot.png)
 
 ## Features
 
-  * Middleware for injecting the server timing struct into the request `Context`
-    and writing the `Server-Timing` header.
+- Middleware for injecting the server timing struct into the request `Context`
+  and writing the `Server-Timing` header.
 
-  * Concurrency-safe structures for easily recording timings of multiple
-    concurrency tasks.
+- Concurrency-safe structures for easily recording timings of multiple
+  concurrency tasks.
 
-  * Parse `Server-Timing` headers as a client.
+- Parse `Server-Timing` headers as a client.
 
-  * Note: No browser properly supports sending the Server-Timing header as
-    an [HTTP Trailer](https://tools.ietf.org/html/rfc7230#section-4.4) so
-	the Middleware only supports a normal header currently.
+- Note: No browser properly supports sending the Server-Timing header as
+  an [HTTP Trailer](https://tools.ietf.org/html/rfc7230#section-4.4) so
+  the Middleware only supports a normal header currently.
 
 ## Browser Support
 
@@ -29,10 +47,10 @@ Browser support is required to **view** server timings easily. Because server
 timings are sent as an HTTP header, there is no negative impact to sending
 the header to unsupported browsers.
 
-  * Either **Chrome 65 or higher** or **Firefox 71 or higher** is required
-    to properly display server timings in the devtools.
+- Either **Chrome 65 or higher** or **Firefox 71 or higher** is required
+  to properly display server timings in the devtools.
 
-  * IE, Opera, and others are unknown at this time.
+- IE, Opera, and others are unknown at this time.
 
 ## Usage
 

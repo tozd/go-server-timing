@@ -1,4 +1,4 @@
-module github.com/mitchellh/go-server-timing
+module github.com/tozd/go-server-timing
 
 go 1.17
 
