@@ -73,12 +73,15 @@ func Middleware(next http.Handler, opts *MiddlewareOpts) http.Handler {
 		}
 
 		w = httpsnoop.Wrap(w, hooks)
-		next.ServeHTTP(w, r)
 
-		// In case that next did not called WriteHeader function, add timing header to the response headers
-		if !headerWritten {
-			writeHeader(headers, &h, opts, http.StatusOK)
-		}
+		defer func() {
+			// In case that next did not called WriteHeader function, add timing header to the response headers
+			if !headerWritten {
+				writeHeader(headers, &h, opts, http.StatusOK)
+			}
+		}()
+
+		next.ServeHTTP(w, r)
 	})
 }
 
