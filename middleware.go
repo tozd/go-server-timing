@@ -50,7 +50,7 @@ func Middleware(next http.Handler, opts *MiddlewareOpts) http.Handler {
 				// http.ResponseWriter.WriteHeader to be called in it's place
 				return func(code int) {
 					// Write the headers and remember that headers were written
-					writeHeader(headers, &h, opts)
+					writeHeader(headers, &h, opts, code)
 					headerWritten = true
 
 					// Call the original WriteHeader function
@@ -63,7 +63,7 @@ func Middleware(next http.Handler, opts *MiddlewareOpts) http.Handler {
 					// If we didn't write headers, then we have to do that
 					// first before any data is written.
 					if !headerWritten {
-						writeHeader(headers, &h, opts)
+						writeHeader(headers, &h, opts, http.StatusOK)
 						headerWritten = true
 					}
 
@@ -77,20 +77,20 @@ func Middleware(next http.Handler, opts *MiddlewareOpts) http.Handler {
 
 		// In case that next did not called WriteHeader function, add timing header to the response headers
 		if !headerWritten {
-			writeHeader(headers, &h, opts)
+			writeHeader(headers, &h, opts, http.StatusOK)
 		}
 	})
 }
 
-func writeHeader(headers http.Header, h *Header, opts *MiddlewareOpts) {
+func writeHeader(headers http.Header, h *Header, opts *MiddlewareOpts, code int) {
 	// Grab the lock just in case there is any ongoing concurrency that
 	// still has a reference and may be modifying the value.
 	h.Lock()
 	defer h.Unlock()
 
 	// If there are no metrics set, or if the user opted-out writing headers,
-	// do nothing
-	if (opts != nil && opts.DisableHeaders) || len(h.Metrics) == 0 {
+	// or if status code is 304, do nothing
+	if (opts != nil && opts.DisableHeaders) || len(h.Metrics) == 0 || code == http.StatusNotModified {
 		return
 	}
 

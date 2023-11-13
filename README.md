@@ -5,6 +5,7 @@ the following features:
 
 - Updated dependencies.
 - Round down all timing information to milliseconds to not be too precise (and potentially open a side channel).
+- Do not set Server-Timing header on 304 Not Modified responses.
 
 To add it, do:
 
